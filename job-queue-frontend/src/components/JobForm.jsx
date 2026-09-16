@@ -13,6 +13,7 @@ import { useState } from 'react';
 export default function JobForm({ onCreate, disabled }) {
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
+  const [status,setStatus] = useState('')
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e) {
@@ -24,9 +25,10 @@ export default function JobForm({ onCreate, disabled }) {
       // onCreate is async and throws on failure (see App.jsx).
       // We await it so we only clear the form on success - if the
       // request fails, the user's typed text stays put.
-      await onCreate({ title: title.trim(), type: type.trim() });
+      await onCreate({ title: title.trim(), type: type.trim(),status:status.trim()});
       setTitle('');
       setType('');
+      setStatus('');
     } finally {
       setSubmitting(false);
     }
@@ -46,6 +48,13 @@ export default function JobForm({ onCreate, disabled }) {
         placeholder="Job type (e.g. image-processing)"
         value={type}
         onChange={(e) => setType(e.target.value)}
+        disabled={disabled || submitting}
+      />
+      <input
+        className="job-form__input"
+        placeholder="Job type (e.g. status-pending)"
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
         disabled={disabled || submitting}
       />
       <button type="submit" className="btn btn--primary" disabled={disabled || submitting}>
